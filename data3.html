@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.3.1/d3-annotation.min.js"></script>
+</head>
+<body>
+  <h2 class="navbar">
+    🔬 Birth rate trend for each country. <span class="small">3/3</span>
+  </h2>
+    <p>
+    This graph shows the trend of birth rate for each country.
+    <br>
+    You can choose the country to see the birth rate.<br>
+    You might see that the most of the country has decreased, while some countries like south korea has decreased serously.<br>
+    while the country like united kingdom has more gentle decrease trend.<br>
+    </p>
+    <select id="selectButton"></select>
+    <div id="my_dataviz">
+      <p class="bullet">
+        Loading some of the data might take time.
+      </p>
+      <svg width="960" height="700"></svg>
+    </div>
+
+    <div class="move">
+        <button type="button" onclick="window.location='data2.html';">Previous</button>
+        <button type="button" onclick="window.location='index.html';">Restart</button>
+    </div>
+    <script>
+      var svg = d3.select("svg");
+      let data = d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTELC6N399K_Q040etJwWMauv3A1Bk79ankEy_ErcBnTyErEm26rm_5eLX2enTiclQR4eAw2WaZpwCi/pub?output=csv", function(data) {
+      var allGroup = d3.map(data, function(d){return d.CountryName}).keys()
+      d3.select(".bullet").style("opacity",0)
+      d3
+        .select("#selectButton")
+        .selectAll('myOptions')
+        .data(allGroup)
+        .enter()
+        .append('option')
+        .text(function(d){return d;})
+        .attr("value", function(d){return d;})
+      var myColor = d3.scaleOrdinal().domain(allGroup).range(d3.schemeSet2);
+
+      let margin = {top:20,right:20,bottom:20,left:40};
+      let width = +svg.attr("width") - margin.left - margin.right;
+      let height = +svg.attr("height") - margin.top - margin.bottom;
+      var x = d3.scaleLinear().domain(d3.extent(data, function(d){return d.Year})).range([0,width]);
+      var y = d3.scaleLinear().domain([0,d3.max(data,function(d){return +d.BirthRate;})]).range([height,0]);
+      svg.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(x).ticks(10));
+    svg.append("g").call(d3.axisLeft(y));
+    var line = svg.append('g')
+      .append("path")
+        .datum(data.filter(function(d){return d.CountryName==allGroup[0]}))
+        .attr("d", d3.line()
+          .x(function(d) { return x(d.Year) })
+          .y(function(d) { return y(+d.BirthRate) })
+        )
+        .attr("stroke", function(d){ return myColor("valueA") })
+        .style("stroke-width", 4)
+        .style("fill", "none")
+        function update(selectedGroup) {
+          console.log("Update start")
+          console.log("==============")
+          console.log("Update Country Name")
+          console.log(selectedGroup)
+        // Create new data with the selection?
+        var dataFilter = data.filter(function(d){return d.CountryName==selectedGroup})
+
+        // Give these new data to update line
+        line
+            .datum(dataFilter)
+            .transition()
+            .duration(1000)
+            .attr("d", d3.line()
+              .x(function(d) { return x(d.Year) })
+              .y(function(d) { return y(+d.BirthRate) })
+            )
+            .attr("stroke", function(d){ return myColor(selectedGroup) })
+    }
+    // When the button is changed, run the updateChart function
+    d3.select("#selectButton").on("change", function(d) {
+      // recover the option that has been chosen
+      var selectedOption = d3.select(this).property("value")
+      // run the updateChart function with this selected option
+      update(selectedOption)
+    })
+      })
+      
+    </script>
+</body>
+
+</html>

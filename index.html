@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.3.1/d3-annotation.min.js"></script>
+    <script src="./app.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container">
+          <h1>👼 Birth rate trend over countries </h1>
+          <h3>Is the decrease of birth rate global trend as countries grow or the only some countries' unique problem? </h3>
+        </div>
+    </nav>
+    <div>
+        <h2>
+            Information
+        </h2>
+        <p>
+            This project used interactive slideshow as narrative visualization structures from three structures <br>
+            Users can click the buttons on the bottom of the page to move around the page to see the scenes <br>
+            Such as relationship between birth rate, GDP per capita and total GDP. <br>
+            Users can see the current scene and detailed information on the top title section<br>
+        </p>
+        <h2>
+            Messaging:
+        </h2>
+        <p>
+            South korea, my home country 🇰🇷 is experiencing serious decrease of birth rate.
+            <br>
+            Some experts says passimistic opinion that this decrease of birth rate will lead to the 'extinction' of the country.
+            <br>
+            I was curious wheter this serious decrease of birth rate is normal between similar countries with GDP and life expectancy. 
+            <br>
+            I have found there are certain relavance between GDP(per capita and total GDP) and birth rate.
+            <br>
+            As the country experience economic growth, usually there birth rate drops.
+            <br>
+            Also as the life expectancy becomes higher(which is another indicator how the country is good enough live in the part of safety and pulic insurance.), the birth rate might change.
+            <br>
+            I wanted to communicate this trends around the countries to more accurately find how the country is experiencing the birth rate.
+            <br>
+            you can start navigate through this slides by clicking the button "Next"
+            <br>
+        </p>
+        <h2>
+            Narrative Structure: Interactive Slideshow
+        </h2>
+        <p>
+            Users can follow the buttons from left to right to follow the “steps” as it goes to the next pages. <br>
+            This is
+            interactive slideshow because there are a little bit “drill-down” pages to narrow down or provide details of
+            <br>
+            certain country’s birth rate trend.<br>
+        </p>
+        <h2>
+            Visual Structure:
+        </h2>
+        <p>
+            Each scene is consist of two parts, "description section" which explains about the data and the "graph section" which shows the detailed graph.
+            <br>
+            This visual structure is contestant across this narrative visualization project. <br>
+            Viewers can understand the data by reading the texts in X and Y axis, and description section on top<br>
+            There are also tooltips and annotations for users to follow, so they can stay focused on the<br>
+            presented data on each scene.<br>
+        </p>
+        <h2>
+            Scenes:
+        </h2>
+        <p>
+            Scenes contain 1 description section(contains title of the data, description and key message) and 1 graph section(which shows different graph suitable for each key message)<br>
+            All 3 scenes use a consistent format avoid viewers to get confused.<br>
+            The annotation template contains texts and pointers to pinpoint the location that I would like to
+            emphasize<br>
+
+
+        </p>
+        <h2>
+            Parameters:
+        </h2>
+        <p>
+            My parameters are variables, which is chart years, country name and birth rate of charts and used as options to drill down the chart.<br>
+
+        </p>
+        <h2>
+            Triggers:
+        </h2>
+        <p>
+            My triggers are button, drop down menu and mouse over. 
+            Buttons are used as a connector to the next chart or page to change the parameters.<br>
+            Dropdown menus are used as a selector for specific country name<br>
+            Mouseover are the trigger to show the tooltips which show the detailed information above the bubble chart and scatter plot.<br>
+        </p>
+        <h2>
+            Data Source
+        </h2>
+        <p>
+            WDI(World Development Index) data from <a href="https://data.worldbank.org/">World Bank</a> was used.<br>
+            Used "GDP Per capita","GDP","Life expectancy" and "Birth Rate" indicator from the data was used.<br>
+            Some cleaning of data was preceded to fill Null values and to only show the countries(not some group of country as "OECD Members") on some of the scenes.
+        </p>
+    </div>
+    <div class="move">
+        <button type="button" onclick="window.location='data1.html';">Next</button>
+    </div>
+</body>
+
+</html>

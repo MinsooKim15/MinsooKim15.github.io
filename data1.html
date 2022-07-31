@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.3.1/d3-annotation.min.js"></script>
+</head>
+<body>
+  <h2 class="navbar">
+    💰Relevance between GDP and Birth rate. <span class="small">1/3</span>
+  </h2>
+    <p>
+    This bubble chart shows the relevance between the GDP of the country and the Birthrate. If you hover over your mouse, you will see the detailed
+    numbers of GDP per capita, GDP and birth rate by country. <br>
+    X axis of the graph is GDP per capita(in $), Y axis of the graph is the birh rate(per 1,000 person) and the radius of the bubble is the GDP of the country(in Billion $).
+    <br>
+    You can see that the GDP is relevant to birth rate from parkistan to japan. <br>
+    However there are some big exceptions like United States or Israel.<br>
+    </p>
+    <div id="my_dataviz">
+      <p class="bullet">
+        Loading some of the data might take time.
+      </p>
+      <svg width="960" height="700"></svg>
+    </div>
+
+    <div class="move">
+        <button type="button" onclick="window.location='index.html';">Previous</button>
+        <button type="button" onclick="window.location='data2.html';">Next</button>
+    </div>
+    <script>
+      var svg = d3.select("svg");
+      let data = d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vR28Wi-DzwHEERj4NR7rUT9_BStu0-cVVugFe8unis_Al-J12GcrX0CbpRjZT-lGf7gXjcZEs-a4Vpt/pub?output=csv", function(data) {
+      // tool tip part
+      // -1- Create a tooltip div that is hidden by default:
+      d3.select(".bullet").style("opacity",0)
+      var tooltip = d3.select("#my_dataviz")
+        .append("div")
+          .style("opacity", 0)
+          .attr("class", "toolTip")
+          .style("background-color", "black")
+          .style("border-radius", "5px")
+          .style("padding", "10px")
+          .style("color", "white")
+      // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
+      var showTooltip = function(d) {
+        tooltip
+          .transition()
+          .duration(200)
+        tooltip
+          .style("opacity", 1)
+          .html(
+            "Country: " + d.CountryName + "<br>" +
+            "Birth rate : " + d.BirthRate + "<br>" + 
+            "GDP per capita : $" + d.GDP + "<br>" + 
+            "GDP : $" + parseInt(d.totalGDP/1000000000) + "Billion"  
+            )
+          .style("left", (d3.mouse(this)[0]+30) + "px")
+          .style("top", (d3.mouse(this)[1]+30) + "px")
+      }
+      var moveTooltip = function(d) {
+        tooltip
+          .style("left", (d3.mouse(this)[0]+30) + "px")
+          .style("top", (d3.mouse(this)[1]+30) + "px")
+      }
+      var hideTooltip = function(d) {
+        tooltip
+          .transition()
+          .duration(200)
+          .style("opacity", 0)
+      }
+
+      let margin = {top:20,right:20,bottom:20,left:40};
+      let width = +svg.attr("width") - margin.left - margin.right;
+      let height = +svg.attr("height") - margin.top - margin.bottom;
+      var x = d3.scaleLinear().domain([0,90]).range([0,width]);
+      var y = d3.scaleLinear().domain([0,40]).range([height,0]);
+      var z = d3.scaleLinear().domain([0, 90]).range([ 1, 200]);
+      svg.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(x))
+    ;
+    svg.append("g").call(d3.axisLeft(y));
+        svg.append('g')
+        .selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx",function(d){
+          console.log(d.GDP/1000)
+          console.log("X==========")
+          console.log(x(d.GDP/1000))
+          return x(d.GDP/1000)})
+        .attr("cy",function(d){
+          console.log("Y==========")
+          console.log(y(d.BirthRate))
+          return y(d.BirthRate)})
+        .attr("r",function(d){
+          console.log("Z==========")
+          console.log(z(d.totalGDP/1000000000000))
+          return z(d.totalGDP/1000000000000)})
+        .style("fill", "#69b3a2")
+        .style("opacity", "0.7")
+         .attr("stroke", "black")
+         .on("mouseover", showTooltip )
+        .on("mousemove", moveTooltip )
+         .on("mouseleave", hideTooltip )
+      // -3- Trigger the functions
+      })
+      
+      // async function init() {
+
+        // svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      // }
+    </script>
+</body>
+
+</html>
